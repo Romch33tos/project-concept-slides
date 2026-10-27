@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Сервис управления очным приёмом – концепция</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: #eef1f6;
+    color: #1f2937;
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .deck {
+    width: 100%;
+    max-width: 1280px;
+    aspect-ratio: 16 / 9;
+    position: relative;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    padding: 56px 64px;
+    opacity: 0;
+    transform: translateX(30px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  .slide-number {
+    position: absolute;
+    top: 24px;
+    right: 32px;
+    font-size: 18px;
+    color: #9ca3af;
+    letter-spacing: 1px;
+  }
+
+  h1 {
+    font-size: 46px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 18px;
+    color: #111827;
+  }
+
+  h2 {
+    font-size: 38px;
+    font-weight: 700;
+    margin-bottom: 32px;
+    color: #111827;
+    border-left: 6px solid #2563eb;
+    padding-left: 18px;
+  }
+
+  h3 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    color: #2563eb;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  p {
+    font-size: 26px;
+    line-height: 1.55;
+    color: #374151;
+    margin-bottom: 14px;
+  }
+
+  .subtitle {
+    font-size: 28px;
+    color: #6b7280;
+    margin-bottom: 44px;
+  }
+
+  .meta {
+    font-size: 24px;
+    color: #4b5563;
+    line-height: 1.8;
+  }
+
+  .columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 44px;
+  }
+
+  .columns-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 28px;
+  }
+
+  ul {
+    list-style: none;
+  }
+
+  li {
+    font-size: 24px;
+    line-height: 1.5;
+    color: #374151;
+    margin-bottom: 14px;
+    padding-left: 28px;
+    position: relative;
+  }
+
+  li::before {
+    content: "–";
+    position: absolute;
+    left: 0;
+    color: #2563eb;
+    font-weight: bold;
+  }
+
+  .card {
+    background: #f3f6fc;
+    border-radius: 12px;
+    padding: 22px 24px;
+    border: 1px solid #dbe3f0;
+  }
+
+  .card h3 {
+    margin-bottom: 12px;
+    font-size: 22px;
+  }
+
+  .card ul li {
+    font-size: 22px;
+    margin-bottom: 10px;
+  }
+
+  .highlight {
+    background: #eaf1ff;
+    border-left: 4px solid #2563eb;
+    padding: 16px 20px;
+    border-radius: 6px;
+    margin: 16px 0;
+  }
+
+  .highlight p {
+    margin: 0;
+    font-size: 24px;
+    color: #1f2937;
+  }
+
+  .tag {
+    display: inline-block;
+    font-size: 20px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-right: 10px;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+
+  .tag-fact {
+    background: #d9f5e0;
+    color: #0f7a35;
+  }
+
+  .tag-assumption {
+    background: #fff0d6;
+    color: #b26a00;
+  }
+
+  .tag-question {
+    background: #ffe0dd;
+    color: #c0392b;
+  }
+
+  .scenario {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .scenario-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    font-size: 24px;
+    color: #374151;
+    line-height: 1.45;
+  }
+
+  .scenario-step .num {
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #2563eb;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .metric-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 8px;
+  }
+
+  .metric {
+    background: #f3f6fc;
+    border-radius: 12px;
+    padding: 22px 24px;
+    border: 1px solid #dbe3f0;
+  }
+
+  .metric .label {
+    font-size: 20px;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+
+  .metric .value {
+    font-size: 24px;
+    color: #1f2937;
+    line-height: 1.5;
+  }
+
+  .metric .value strong {
+    color: #2563eb;
+  }
+
+  .controls {
+    position: absolute;
+    bottom: 20px;
+    right: 28px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .controls button {
+    background: #e5eaf3;
+    border: none;
+    color: #1f2937;
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 22px;
+    transition: background 0.2s;
+  }
+
+  .controls button:hover {
+    background: #2563eb;
+    color: #fff;
+  }
+
+  .controls .counter {
+    font-size: 20px;
+    color: #6b7280;
+    min-width: 60px;
+    text-align: center;
+  }
+
+  .progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 4px;
+    background: #2563eb;
+    transition: width 0.35s ease;
+  }
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+  <!-- Слайд 1 -->
+  <div class="slide active">
+    <div class="slide-number">01 / 07</div>
+    <h1>Сервис управления очным приёмом<br>для подразделения университета</h1>
+    <p class="subtitle">Упрощённая концепция проекта</p>
+    <div class="meta">
+      Учебная практика · Лабораторная работа №3<br>
+      Группа ПИ-241 · Хадралиев Роман
+    </div>
+  </div>
+
+  <!-- Слайд 2 -->
+  <div class="slide">
+    <div class="slide-number">02 / 07</div>
+    <h2>Проблема и пользователи</h2>
+    <div class="columns">
+      <div>
+        <h3>Пользователи</h3>
+        <ul>
+          <li><strong>Студент</strong> – пользователь</li>
+          <li><strong>Сотрудник дирекции</strong> – исполнитель</li>
+          <li><strong>Руководитель дирекции</strong> – заказчик</li>
+        </ul>
+        <h3 style="margin-top: 28px;">Ситуация</h3>
+        <p>Студент приходит в дирекцию и попадает в «слепую» очередь: не знает, кто за кем, сколько ждать, свободен ли нужный сотрудник.</p>
+      </div>
+      <div>
+        <h3>Последствия</h3>
+        <ul>
+          <li>Студент теряет время, опаздывает, уходит ни с чем</li>
+          <li>Сотрудник не управляет потоком</li>
+          <li>Растёт число однотипных вопросов</li>
+        </ul>
+        <div class="highlight" style="margin-top: 22px;">
+          <p><span class="tag tag-fact">Факт</span> Наблюдение в перерывах + отклики 3 одногруппников</p>
+        </div>
+        <div class="highlight">
+          <p><span class="tag tag-assumption">Предположение</span> Ожидание 15-30 минут – требует замера</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Слайд 3 -->
+  <div class="slide">
+    <div class="slide-number">03 / 07</div>
+    <h2>Предлагаемое изменение и сценарий</h2>
+    <div class="columns">
+      <div>
+        <h3>Что меняем</h3>
+        <p>Сервис упорядочивает обращения по типу и времени. Студент видит номер, статус и время. Сотрудник управляет потоком.</p>
+      </div>
+      <div>
+        <h3>Основной сценарий</h3>
+        <div class="scenario">
+          <div class="scenario-step"><span class="num">1</span><span>Студент сканирует QR – переходит на веб-страницу</span></div>
+          <div class="scenario-step"><span class="num">2</span><span>Выбирает тип обращения – получает талон</span></div>
+          <div class="scenario-step"><span class="num">3</span><span>Видит номер и примерное время ожидания</span></div>
+          <div class="scenario-step"><span class="num">4</span><span>Сотрудник вызывает следующего – меняет статус</span></div>
+          <div class="scenario-step"><span class="num">5</span><span>Студент понимает, когда подойти</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Слайд 4 -->
+  <div class="slide">
+    <div class="slide-number">04 / 07</div>
+    <h2>Функции ядра и граница MVP</h2>
+    <div class="columns">
+      <div>
+        <h3>Функции ядра</h3>
+        <ul>
+          <li>Вход по QR-коду (без установки)</li>
+          <li>Выбор типа обращения и талон</li>
+          <li>Статус и время ожидания для студента</li>
+          <li>Панель сотрудника с управлением статусами</li>
+          <li>Раздел часто задаваемых вопросов</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Не входит в MVP</h3>
+        <ul>
+          <li>Игры и развлечения в талоне</li>
+          <li>Пуш-уведомления</li>
+          <li>Статус отделения (открыто/закрыто)</li>
+          <li>Онлайн-заказ справок</li>
+          <li>Интеграции с системами университета</li>
+          <li>Аналитика для руководства</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Слайд 5 -->
+  <div class="slide">
+    <div class="slide-number">05 / 07</div>
+    <h2>Ценность и метрики</h2>
+    <div class="columns-3" style="margin-bottom: 30px;">
+      <div class="card">
+        <h3>Студент</h3>
+        <ul>
+          <li>Меньше времени в зоне ожидания</li>
+          <li>Понимание, когда подойти</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Сотрудник</h3>
+        <ul>
+          <li>Меньше отвлечений</li>
+          <li>Управляемый поток</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Подразделение</h3>
+        <ul>
+          <li>Меньше людей в коридоре</li>
+          <li>Видимая загрузка</li>
+        </ul>
+      </div>
+    </div>
+    <div class="metric-row">
+      <div class="metric">
+        <div class="label">Метрика 1 · студент</div>
+        <div class="value">Время ожидания<br>Базовая линия: <strong>15-30 мин</strong><br>Цель: <strong>≤ 5-10 мин</strong></div>
+      </div>
+      <div class="metric">
+        <div class="label">Метрика 2 · сотрудник</div>
+        <div class="value">Однотипные вопросы<br>Базовая линия: фиксируется до внедрения<br>Цель: <strong>снижение в 2 раза</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Слайд 6 -->
+  <div class="slide">
+    <div class="slide-number">06 / 07</div>
+    <h2>Главная гипотеза и ближайшая проверка</h2>
+    <div class="columns">
+      <div>
+        <h3>Гипотеза</h3>
+        <p>Руководитель дирекции готов внедрить сервис, потому что видит организационную выгоду: уменьшается очередь из студентов и количество однотипных вопросов. </p>
+        <div class="highlight" style="margin-top: 18px;">
+          <p><strong>Действие:</strong> показать прототип в Figma, предложить тестовый день</p>
+        </div>
+        <div class="highlight">
+          <p><strong>Срок:</strong> 1 тестовый день приёма</p>
+        </div>
+      </div>
+      <div>
+        <h3>Порог успеха</h3>
+        <ul>
+          <li>Сотрудник готов попробовать</li>
+          <li>Время ожидания ≤ 10 мин</li>
+          <li>Вопросы ↓ в 2 раза</li>
+        </ul>
+        <div class="highlight" style="margin-top: 18px; border-left-color: #d97706; background: #fff5e6;">
+          <p><strong>Если не подтвердится:</strong> пересборка под запись на сдачу курсовых/экзаменов. Заказчик – преподаватель.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Слайд 7 -->
+  <div class="slide">
+    <div class="slide-number">07 / 07</div>
+    <h2>Вопросы и следующий шаг</h2>
+    <div class="columns">
+      <div>
+        <h3>Три вопроса</h3>
+        <ul>
+          <li>Готов ли сотрудник/руководитель использовать сервис в тестовом режиме?</li>
+          <li>Сколько времени студенты реально проводят в очереди и как это фиксируется?</li>
+          <li>Не добавляет ли система сотруднику новую рутину?</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Следующий шаг</h3>
+        <div class="scenario">
+          <div class="scenario-step"><span class="num">1</span><span>Прототип в Figma</span></div>
+          <div class="scenario-step"><span class="num">2</span><span>Показать 3 студентам и 1 сотруднику</span></div>
+          <div class="scenario-step"><span class="num">3</span><span>Тестовый день приёма</span></div>
+          <div class="scenario-step"><span class="num">4</span><span>Решение: продолжить или пересобрать</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Управление -->
+  <div class="controls">
+    <button id="prev">←</button>
+    <span class="counter" id="counter">1 / 7</span>
+    <button id="next">→</button>
+  </div>
+  <div class="progress" id="progress" style="width: 14.28%;"></div>
+
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const counter = document.getElementById('counter');
+  const progress = document.getElementById('progress');
+  let current = 0;
+
+  function show(index) {
+    slides[current].classList.remove('active');
+    current = (index + slides.length) % slides.length;
+    slides[current].classList.add('active');
+    counter.textContent = (current + 1) + ' / ' + slides.length;
+    progress.style.width = ((current + 1) / slides.length * 100) + '%';
+  }
+
+  document.getElementById('next').addEventListener('click', () => show(current + 1));
+  document.getElementById('prev').addEventListener('click', () => show(current - 1));
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') show(current + 1);
+    if (e.key === 'ArrowLeft') show(current - 1);
+  });
+</script>
+
+</body>
+</html>
