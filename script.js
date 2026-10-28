@@ -13,3 +13,8 @@ function show(index) {
 
 document.getElementById('next').addEventListener('click', () => show(current + 1));
 document.getElementById('prev').addEventListener('click', () => show(current - 1));
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') show(current + 1);
+  if (e.key === 'ArrowLeft') show(current - 1);
+});
