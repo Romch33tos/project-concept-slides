@@ -166,3 +166,20 @@ li::before {
   background: #ffe0dd;
   color: #c0392b;
 }
+
+.card {
+  background: #f3f6fc;
+  border-radius: 12px;
+  padding: 22px 24px;
+  border: 1px solid #dbe3f0;
+}
+
+.card h3 {
+  margin-bottom: 12px;
+  font-size: 22px;
+}
+
+.card ul li {
+  font-size: 22px;
+  margin-bottom: 10px;
+}
