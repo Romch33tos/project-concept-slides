@@ -141,3 +141,28 @@ li::before {
   font-size: 24px;
   color: #1f2937;
 }
+
+.tag {
+  display: inline-block;
+  font-size: 20px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-right: 10px;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.tag-fact {
+  background: #d9f5e0;
+  color: #0f7a35;
+}
+
+.tag-assumption {
+  background: #fff0d6;
+  color: #b26a00;
+}
+
+.tag-question {
+  background: #ffe0dd;
+  color: #c0392b;
+}
