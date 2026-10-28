@@ -10,3 +10,6 @@ function show(index) {
   counter.textContent = (current + 1) + ' / ' + slides.length;
   progress.style.width = ((current + 1) / slides.length * 100) + '%';
 }
+
+document.getElementById('next').addEventListener('click', () => show(current + 1));
+document.getElementById('prev').addEventListener('click', () => show(current - 1));
