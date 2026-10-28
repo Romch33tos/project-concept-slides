@@ -88,3 +88,10 @@ h3 {
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
+
+p {
+  font-size: 26px;
+  line-height: 1.55;
+  color: #374151;
+  margin-bottom: 14px;
+}
