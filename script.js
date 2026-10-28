@@ -1,3 +1,4 @@
 // script.js
-document.getElementById('next').addEventListener('click', () => {});
-document.getElementById('prev').addEventListener('click', () => {});
+const slides = document.querySelectorAll('.slide');
+const counter = document.getElementById('counter');
+const progress = document.getElementById('progress');
