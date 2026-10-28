@@ -106,3 +106,24 @@ p {
   grid-template-columns: 1fr 1fr 1fr;
   gap: 28px;
 }
+
+ul {
+  list-style: none;
+}
+
+li {
+  font-size: 24px;
+  line-height: 1.5;
+  color: #374151;
+  margin-bottom: 14px;
+  padding-left: 28px;
+  position: relative;
+}
+
+li::before {
+  content: "–";
+  position: absolute;
+  left: 0;
+  color: #2563eb;
+  font-weight: bold;
+}
