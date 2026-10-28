@@ -7,4 +7,6 @@ function show(index) {
   slides[current].classList.remove('active');
   current = (index + slides.length) % slides.length;
   slides[current].classList.add('active');
+  counter.textContent = (current + 1) + ' / ' + slides.length;
+  progress.style.width = ((current + 1) / slides.length * 100) + '%';
 }
