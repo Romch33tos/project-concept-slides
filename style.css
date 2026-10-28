@@ -127,3 +127,17 @@ li::before {
   color: #2563eb;
   font-weight: bold;
 }
+
+.highlight {
+  background: #eaf1ff;
+  border-left: 4px solid #2563eb;
+  padding: 16px 20px;
+  border-radius: 6px;
+  margin: 16px 0;
+}
+
+.highlight p {
+  margin: 0;
+  font-size: 24px;
+  color: #1f2937;
+}
