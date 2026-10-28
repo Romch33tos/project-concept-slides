@@ -70,3 +70,21 @@ h1 {
   color: #4b5563;
   line-height: 1.8;
 }
+
+h2 {
+  font-size: 38px;
+  font-weight: 700;
+  margin-bottom: 32px;
+  color: #111827;
+  border-left: 6px solid #2563eb;
+  padding-left: 18px;
+}
+
+h3 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 14px;
+  color: #2563eb;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
