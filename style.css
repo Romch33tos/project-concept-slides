@@ -22,3 +22,31 @@ body {
   box-shadow: 0 20px 60px rgba(0,0,0,0.15);
   overflow: hidden;
 }
+
+.slide {
+  position: absolute;
+  inset: 0;
+  padding: 56px 64px;
+  opacity: 0;
+  transform: translateX(30px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.slide.active {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+.slide-number {
+  position: absolute;
+  top: 24px;
+  right: 32px;
+  font-size: 18px;
+  color: #9ca3af;
+  letter-spacing: 1px;
+}
