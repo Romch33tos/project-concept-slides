@@ -50,3 +50,23 @@ body {
   color: #9ca3af;
   letter-spacing: 1px;
 }
+
+h1 {
+  font-size: 46px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 18px;
+  color: #111827;
+}
+
+.subtitle {
+  font-size: 28px;
+  color: #6b7280;
+  margin-bottom: 44px;
+}
+
+.meta {
+  font-size: 24px;
+  color: #4b5563;
+  line-height: 1.8;
+}
