@@ -245,3 +245,36 @@ li::before {
 .metric .value strong {
   color: #2563eb;
 }
+
+.controls {
+  position: absolute;
+  bottom: 20px;
+  right: 28px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.controls button {
+  background: #e5eaf3;
+  border: none;
+  color: #1f2937;
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 22px;
+  transition: background 0.2s;
+}
+
+.controls button:hover {
+  background: #2563eb;
+  color: #fff;
+}
+
+.controls .counter {
+  font-size: 20px;
+  color: #6b7280;
+  min-width: 60px;
+  text-align: center;
+}
